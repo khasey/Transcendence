@@ -10,11 +10,70 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Social {
+  id                Int      @id
+  id_user           Int      @unique
+  friend            Boolean
+  blocked           Boolean
+  first_interaction DateTime
+  message_history   Int
+  user              User     @relation(fields: [id_user], references: [id])
+}
+
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                Int       @id
+  username          String
+  password          String
+  authentification  Boolean
+  party_win         Int
+  party_loose       Int
+  created_at        DateTime
+  socialId          Int
+  social            Social?
+  games1            Game[]    @relation("games1")
+  games2            Game[]    @relation("games2")
+  roles             Role[]    @relation("roles")
+  messages          Message[] @relation("messages")
+}
+
+model Game {
+  id         Int      @id
+  id_user_1  Int
+  id_user_2  Int
+  score      Int
+  match_date DateTime
+  user1      User     @relation(fields: [id_user_1], references: [id], name: "games1")
+  user2      User     @relation(fields: [id_user_2], references: [id], name: "games2")
+}
+
+model Message {
+  id       Int      @id
+  sender   Int
+  message  String
+  date     DateTime
+  user     User     @relation(fields: [sender], references: [id], name: "messages")
+  channelId Int
+  channel  Channel  @relation(fields: [channelId], references: [id])
+}
+
+model Channel {
+  id              Int        @id
+  name            String
+  closed          Boolean
+  created         DateTime
+  role            Int
+  message_history Int
+  messages        Message[] 
+  roleId          Int
+  role_channel    Role      @relation(fields: [roleId], references: [id])
+}
+
+model Role {
+  id       Int      @id
+  userId   Int
+  owner    Boolean
+  admin    Boolean
+  join     DateTime
+  user     User     @relation(fields: [userId], references: [id], name: "roles")
+  channels Channel[] 
 }
