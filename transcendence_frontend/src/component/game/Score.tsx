@@ -8,7 +8,7 @@ const Score:React.FC = () => {
       <div className={styles.left}>
       <Avatar
         alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
+        src=""
         sx={{ width: 100, height: 100 , marginLeft: 20,
           "@media screen and (min-width: 1000px) and (max-width: 1500px)":{
             width: 80, height: 80 , marginLeft: 5,
@@ -41,7 +41,7 @@ const Score:React.FC = () => {
       </div>
       <Avatar
         alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
+        src=""
         sx={{ width: 100, height: 100 , marginRight: 20,
           "@media screen and (min-width: 1000px) and (max-width: 1500px)":{
             width: 80, height: 80 , marginRight: 5,

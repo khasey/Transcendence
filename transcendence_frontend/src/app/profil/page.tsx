@@ -39,7 +39,7 @@ const Profil: React.FC = () => {
       <div className={styles.all_score}>
         <div className={styles.all_score_avatar}>
 
-          <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" 
+          <Avatar alt="Remy Sharp" src="" 
           sx={{
             "@media screen and (width < 1500px)":{
               width:'70px',

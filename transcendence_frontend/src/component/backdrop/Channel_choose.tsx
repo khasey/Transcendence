@@ -8,7 +8,7 @@ function Channel_choose() {
         <div className={styles.name}>
         <Avatar
             alt="Remy Sharp"
-            src="/static/images/avatar/1.jpg"
+            src=""
             sx={{ width: 64, height: 64 }}
         />
         <p>KTHIERRY</p>

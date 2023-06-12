@@ -23,7 +23,7 @@ const Profil: React.FC = () => {
           gap:'0%',
         }}>
         <Box sx={{ display: 'flex', flexDirection:'column', alignItems:'center'}}>
-          <Avatar alt="Kevin" src="/static/images/avatar/1.jpg" 
+          <Avatar alt="Kevin" src="" 
           sx={{
             "@media screen and (width < 1500px)":{
               width:'80px',

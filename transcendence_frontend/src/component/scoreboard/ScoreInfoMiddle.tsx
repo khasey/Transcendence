@@ -42,7 +42,7 @@ const ScoreInfo : React.FC = () => {
                   <div className={styles.pseudo}>
                   <Avatar
                     alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
+                    src=""
                     sx={{ width: 50, height: 50 }}
                     />
                     <p>KTHIERRY</p>
@@ -54,7 +54,7 @@ const ScoreInfo : React.FC = () => {
                   <p>KTHIERRY</p>
                   <Avatar
                     alt="Remy Sharp"
-                    src="/static/images/avatar/1.jpg"
+                    src=""
                     sx={{ width: 50, height: 50 }}
                     />
                   </div>

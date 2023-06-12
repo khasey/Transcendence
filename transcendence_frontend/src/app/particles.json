@@ -586,7 +586,7 @@
           "type": "images",
           "options": {
             "images": {
-              "src": "/path/in.jpg",
+              "src": "./images/Rectangle.png",
               "width": 1,
               "height": 1
             }
