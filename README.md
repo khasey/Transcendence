@@ -53,3 +53,6 @@
     Création des Modules : Les modules sont un moyen efficace d'organiser votre application en séparant celle-ci en plusieurs modules indépendants.
 
     Sécurité : Vous devrez également vous assurer que votre application est sécurisée. Cela peut inclure l'implémentation de l'authentification et de l'autorisation, la validation des données entrantes, etc.
+    
+############################## - prisma - ######################################## 
+npx prisma db push 
