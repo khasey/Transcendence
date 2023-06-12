@@ -34,6 +34,8 @@ services:
       - backend
     depends_on:
       - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
 
   db:
     image: postgres
@@ -46,6 +48,9 @@ services:
       - "5959:5959" 
     networks:
       - backend
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    
 
   server:
     build: ./transcendence_serveur
@@ -55,3 +60,7 @@ services:
       - backend
     depends_on:
       - back
+
+volumes:
+  pgadmin_data:
+  db_data:
