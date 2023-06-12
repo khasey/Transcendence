@@ -1,32 +1,57 @@
-// const pgPromise = require('pg-promise');
-// const pgp = pgPromise(/*options*/);
-// const db = pgp(process.env.DATABASE_URL);
-const express = require("express");
-const cors = require("cors");
-// require('dotenv').config()
-
+const express = require('express');
 const app = express();
-const port = "3001";
-app.use(cors()); // Active CORS
+const http = require('http');
+const { Server } = require("socket.io");
+const cors = require('cors');
+const path = require('path');
 
-app.get("/api", (req, res) => {
-  const responseData = { 
+
+app.use(cors());
+app.use('/', express.static(path.join(__dirname, './transcendence_frontend/src/component/game')));
+
+
+const server = http.createServer(app);
+
+app.get('/api', (req, res) => {
+  console.log("API called");
+  const responseData = {
     hello: "Hello from server!",
     checkData: "Here, the data you want!"
   };
   res.json(responseData);
+  console.log(responseData);
 });
 
-
-app.listen(port, () => {
-  console.log(`Server listening on ${port}`);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  }
 });
 
+io.on('connection', (socket) => {
+  handleConnection(socket);
+  
+  socket.on('paddleMove', handlePaddleMove);
+  
+  socket.on('disconnect', () => {
+    handleDisconnect(socket);
+  });
+});
 
-// db.one("SELECT $1 AS value", 123)
-//   .then((data) => {
-//     console.log("DATA:", data.value);
-//   })
-//   .catch((error) => {
-//     console.log("ERROR:", error);
-//   });
+function handleConnection(socket) {
+  console.log('Client connected');
+}
+
+function handleDisconnect(socket) {
+  console.log('Client disconnected');
+  socket.broadcast.emit('playerDisconnected');
+}
+
+function handlePaddleMove(data) {
+  this.broadcast.emit('paddleMove', data);
+}
+
+server.listen(3001, '0.0.0.0', () => {
+  console.log("Server listening on port 3001");
+});
