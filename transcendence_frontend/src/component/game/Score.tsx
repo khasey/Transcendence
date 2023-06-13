@@ -9,7 +9,7 @@ const Score:React.FC = () => {
       <Avatar
         alt="Remy Sharp"
         src=""
-        sx={{ width: 100, height: 100 , marginLeft: 20,
+        sx={{ width: 70, height: 70 , marginLeft: 20,
           "@media screen and (min-width: 1000px) and (max-width: 1500px)":{
             width: 80, height: 80 , marginLeft: 5,
           },
@@ -21,20 +21,12 @@ const Score:React.FC = () => {
       <div className={styles.username}>
         USERNAME
       </div>
-      <div className={styles.score}>
-        SCORE
-      </div>
 
 
       </div>
-      
-      <div className={styles.center}></div>
 
       <div className={styles.right}>
       
-      <div className={styles.score}>
-        SCORE
-      </div>
       
       <div className={styles.username}>
         USERNAME
@@ -42,7 +34,7 @@ const Score:React.FC = () => {
       <Avatar
         alt="Remy Sharp"
         src=""
-        sx={{ width: 100, height: 100 , marginRight: 20,
+        sx={{ width: 70, height: 70 , marginRight: 20,
           "@media screen and (min-width: 1000px) and (max-width: 1500px)":{
             width: 80, height: 80 , marginRight: 5,
           },

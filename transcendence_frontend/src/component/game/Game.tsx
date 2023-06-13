@@ -13,6 +13,8 @@ const netWidth = 2;
 const paddleGap = 40;
 let player1Score = 0;
 let player2Score = 0;
+let ScoreServerPlayer1 = player1Score;
+let ScoreServerPlayer2 = player2Score;
 let paddle1Y = 0;
 let paddle2Y = 0;
 let ballX = 50;
@@ -195,15 +197,19 @@ const updateGame = () => {
 
   if (ballX - ballRadius < 0) {
     player2Score++;
+    sendScoresToServer();
     resetBall();
   } else if (ballX + ballRadius > canvas.width) {
     player1Score++;
+    sendScoresToServer();
     resetBall();
   }
 
   drawGame();
   requestAnimationFrame(updateGame);
 };
+
+
 
 const resetBall = () => {
   trail.length = 0;
@@ -215,18 +221,63 @@ const resetBall = () => {
   ballSpeedY = ballSpeedY * randomDirection;
 };
 
-const drawScores = () => {
-  context.fillStyle = 'white';
-  context.font = '24px Arial';
-  context.fillText(`Player 1: ${player1Score}`, canvas.width / 4, 30);
-  context.fillText(`Player 2: ${player2Score}`, (canvas.width * 3) / 4, 30);
+
+
+const sendScoresToServer = () => {
+  const serverIP = '192.168.1.71'; // Remplacez par l'adresse IP du serveur
+  const serverPort = 3001; // Remplacez par le port du serveur
+
+  const url = `http://${serverIP}:${serverPort}/api/scores`; // URL de l'API du serveur
+
+  const data = {
+    player1Score: player1Score,
+    player2Score: player2Score
+  };
+
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log('Scores sent to the server successfully.');
+    } else {
+      console.error('Failed to send scores to the server.');
+    }
+  })
+  .catch(error => {
+    console.error('An error occurred while sending scores to the server:', error);
+  });
 };
+
 
 const socket: Socket = io('http://192.168.1.71:3001/');
 
 socket.on('paddleMove', (data: { y: number }) => {
   paddle2Y = data.y;
 });
+
+socket.on('scoresUpdate', (data: { player1Score: number; player2Score: number }) => {
+  ScoreServerPlayer1 = data.player1Score;
+  ScoreServerPlayer2 = data.player2Score;
+});
+
+const drawScores = () => {
+  const fontSize = canvas.width * 0.15;  // 10% of the width of the canvas
+  context.font = `${fontSize}px Roboto`;
+  
+  const scoreText1 = ` ${ScoreServerPlayer1}`;
+  const scoreText2 = ` ${ScoreServerPlayer2}`;
+
+  const scoreText1Width = context.measureText(scoreText1).width;
+  const scoreText2Width = context.measureText(scoreText2).width;
+  context.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  context.fillText(scoreText1, (canvas.width - scoreText1Width) / 3.5, canvas.height / 1.70);
+  context.fillText(scoreText2, (canvas.width - scoreText2Width) / 1.5, canvas.height / 1.70);
+};
 
 document.addEventListener('keydown', handleKeyDown);
 document.addEventListener('keyup', handleKeyUp);
