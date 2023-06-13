@@ -5,10 +5,9 @@ const { Server } = require("socket.io");
 const cors = require('cors');
 const path = require('path');
 
-
 app.use(cors());
 app.use('/', express.static(path.join(__dirname, './transcendence_frontend/src/component/game')));
-
+app.use(express.json()); // Ajout du middleware pour le parsing JSON
 
 const server = http.createServer(app);
 
@@ -29,11 +28,28 @@ const io = new Server(server, {
   }
 });
 
+app.post('/api/scores', (req, res) => {
+  const { player1Score, player2Score } = req.body;
+
+  // Traitez les scores reçus du client comme vous le souhaitez
+  // Par exemple, vous pouvez les stocker en base de données ou les utiliser pour mettre à jour un état du jeu sur le serveur
+
+  console.log('Received scores from the client:');
+  console.log('Player 1 Score:', player1Score);
+  console.log('Player 2 Score:', player2Score);
+
+  // Envoyez les scores des deux joueurs à tous les clients connectés
+  io.emit('scoresUpdate', { player1Score, player2Score });
+
+  res.json({ player1Score, player2Score });
+});
+
+
 io.on('connection', (socket) => {
   handleConnection(socket);
-  
+
   socket.on('paddleMove', handlePaddleMove);
-  
+
   socket.on('disconnect', () => {
     handleDisconnect(socket);
   });
