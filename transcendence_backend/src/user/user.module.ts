@@ -18,4 +18,3 @@ import { User } from './user.entity';
   exports: [UserService] // si vous voulez utiliser ce service dans d'autres modules
 })
 export class UserModule {}
-

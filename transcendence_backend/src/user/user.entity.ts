@@ -14,7 +14,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'User' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
