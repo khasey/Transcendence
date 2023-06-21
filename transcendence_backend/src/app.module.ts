@@ -3,9 +3,10 @@ import { ConfigModule } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
+import { AppController } from './app.controller';
 
 @Module({
-  imports: [AuthModule,
+  imports: [AuthModule, UserModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forRoot()],
       useFactory: () => ({
@@ -15,12 +16,13 @@ import { UserModule } from './user/user.module';
         username: 'postgres',
         password: 'oJzlKrGNlIa8N5stYL2G',
         database: 'railway',
-        entities: [__dirname + '/*/.entity{.ts,.js}'],
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true,
       }),
     }),
-    UserModule,
+    // UserModule,
 ],
+  controllers: [AppController],
   providers: [],
 })
 export class AppModule {}
