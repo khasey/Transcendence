@@ -1,26 +1,26 @@
-import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { AppService } from './app.service';
-import { AppController } from './app.controller'; // Ajoutez cette ligne
+import { Module } from '@nestjs/common';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [
+  imports: [AuthModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forRoot()],
       useFactory: () => ({
         type: 'postgres',
-        host: process.env.POSTGRES_HOST,
-        port: parseInt(process.env.POSTGRES_PORT),
-        username: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
-        database: process.env.POSTGRES_DATABASE,
+        host: 'containers-us-west-53.railway.app',
+        port: 5959,
+        username: 'postgres',
+        password: 'oJzlKrGNlIa8N5stYL2G',
+        database: 'railway',
         entities: [__dirname + '/*/.entity{.ts,.js}'],
         synchronize: true,
       }),
     }),
-  ],
-  controllers: [AppController], // Ajoutez AppController ici
-  providers: [AppService],
+    UserModule,
+],
+  providers: [],
 })
 export class AppModule {}
