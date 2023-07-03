@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './TextSend.module.css'
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
@@ -6,6 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import Link from 'next/link';
 import { User } from '../../../../transcendence_backend/src/user/user.entity';
 import axios from 'axios';
+import { ChatContext } from './ChatContext';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -36,7 +37,23 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     },
   }));
 
-const TextSend:React.FC = () =>{
+  interface TextSendProps {
+    message: string;
+    user: User | null;
+  }
+
+const TextSend:React.FC<TextSendProps> = ({message}) =>{
+
+  const currentTime = new Date();
+  const timeString = `${currentTime.getHours()}:${currentTime.getMinutes()}`;
+
+  const chatContext = useContext(ChatContext);
+
+  if (!chatContext) {
+    throw new Error("Vous devez utiliser le contexte du chat à l'intérieur du fournisseur de chat");
+  }
+
+  const { messages } = chatContext;
 
   const [user, setUser] = useState<User | null>(null);
 
@@ -67,17 +84,17 @@ const TextSend:React.FC = () =>{
             </StyledBadge>
         </div>
         <div className={styles.text}>
-            <div className={styles.text_in}>
-                <div className={styles.inner_name}>
-                    <p>{user?.username}</p>
-                </div>
-                <div className={styles.inner_text}>
-                    <p>Hi, I'm Kthierry</p>
-                </div>
-            </div>
-            <div className={styles.time}>
-                <p>12:00PM</p>
-            </div>
+        <div className={styles.text_in}>
+          <div className={styles.inner_name}>
+            <p>{user?.username}</p>
+          </div>
+          <div className={styles.inner_text}>
+            <p>{message}</p>
+          </div>
+        </div>
+        <div className={styles.time}>
+          <p>{timeString}</p>
+        </div>
         </div>
     </div>
   )

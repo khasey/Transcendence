@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { FontLoader } from 'three-stdlib';
 import { useEffect } from 'react';
 import RobotoBoldTypeface from '/public/Roboto_Bold.typeface.json';
+import styles from './Scene.module.css'
 
 
 
@@ -100,7 +101,7 @@ const Scene = () => {
   }, []);
 
   return (
-    <div style={{height:'150px', width:'130px', display:'flex' }}>
+    <div className={styles.container}>
     <Canvas onPointerOver={() => setHovered(true)} onPointerOut={() => setHovered(false)}>
       <ambientLight intensity={0.5} />
       <pointLight ref={lightRef} position={[10, 10, 10]} />

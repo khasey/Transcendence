@@ -1,76 +1,26 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { Avatar, AvatarGroup } from '@mui/material';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import Diversity3Icon from '@mui/icons-material/Diversity3';
 import styles from './backdrop.module.css';
-import { styled } from '@mui/material/styles';
-import Badge from '@mui/material/Badge';
 import FullChannel from './FullChannel';
 import EnterText from './EnterText';
 import TextSend from './TextSend';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { User } from '../../../../transcendence_backend/src/user/user.entity';
-import axios from 'axios';
+import { ChatContext } from './ChatContext';
+import { FriendsOnline } from './FriendsOnline';
 
 type Anchor = 'right';
 
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    backgroundColor: '#44b700',
-    color: '#44b700',
-    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
-    '&::after': {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      width: '100%',
-      height: '100%',
-      borderRadius: '50%',
-      animation: 'ripple 1.2s infinite ease-in-out',
-      border: '1px solid currentColor',
-      content: '""',
-    },
-  },
-  '@keyframes ripple': {
-    '0%': {
-      transform: 'scale(.8)',
-      opacity: 1,
-    },
-    '100%': {
-      transform: 'scale(2.4)',
-      opacity: 0,
-    },
-  },
-}));
-
 export default function Backdrop() {
 
+  const [messages, setMessages] = useState<string[]>([]);  // Ajoutez ceci
 
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get<User>('http://localhost:4000/user', { withCredentials: true });
-        setUser(response.data);
-      } catch (error) {
-        console.error("Erreur lors de la récupération de l'utilisateur :", error);
-      }
-    };
-
-    fetchUser();
-  }, []);
+  const value: IChatContext = { messages, setMessages }; 
 
   const [state, setState] = React.useState({
     right: false,
   });
-
-  const [selectedIcon, setSelectedIcon] = React.useState<string | null>(null);
 
 
   const toggleDrawer =
@@ -88,6 +38,7 @@ export default function Backdrop() {
       setState({ ...state, [anchor]: open });
     };
   return (
+    <ChatContext.Provider value={value}>
     <div>
       {(['right'] as const).map((anchor) => (
         <React.Fragment key={anchor}>
@@ -96,9 +47,15 @@ export default function Backdrop() {
             fontSize:'12px',
             fontWeight:'600',
             color:'#ffffff6b',
+            
+            "@media screen and (width < 1000px)":{
+              fontSize:'8px',
+              marginLeft:'-35%',
+              marginTop:'5%'
+            },
             '&:hover':{
                 color:'#f0f8ff'
-            }
+            },
           }}>CHAT</Button>
           <SwipeableDrawer
             anchor={anchor}
@@ -121,38 +78,18 @@ export default function Backdrop() {
                 },
             }}>
 {/* ############## INSIDE BACKDROP ############### */}
-            <div className={styles.channel}>
-                <div className={styles.channel_photo}>
-                <AvatarGroup max={4}>
-                  <Avatar alt="Remy Sharp" src="" style={{cursor:'pointer'}}/>
-                  <Avatar alt="Travis Howard" src="" style={{cursor:'pointer'}}/>
-                  <Avatar alt="Cindy Baker" src="" style={{cursor:'pointer'}}/>
-                  <Avatar alt="Agnes Walker" src="" style={{cursor:'pointer'}}/>
-                  <Avatar alt="Trevor Henderson" src="" style={{cursor:'pointer'}}/>
-                </AvatarGroup>
-                </div>
-                <div className={styles.channel_text}>
-                    <h3>Friends Online</h3>
-                </div>
-                <div className={styles.channel_profil}>
-                <StyledBadge
-                  overlap="circular"
-                  anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-                  variant="dot"
-                  >
-                  <Link href="/profil">
-                  <Avatar alt="Remy Sharp" src={user?.imageUrl} style={{cursor:'pointer'}}/>
-                  </Link>
-                </StyledBadge>
-                </div>  
-            </div>
+            <FriendsOnline/>
 {/* ############## INSIDE TEXT AREA ############### */}
             <div className={styles.channel_tchat}>
               <div className={styles.title}>
                 <FullChannel/>
               </div>
               <div className={styles.tchat}>
-                <TextSend/>
+                <div className={styles.textsendermodule}>
+                  {messages.reverse().map((message, i) => (
+                  <TextSend key={i} message={message} user={null} />
+                ))}
+                </div>
               </div>
               <div className={styles.enter_text}></div>
                   <EnterText/>
@@ -163,5 +100,6 @@ export default function Backdrop() {
         </React.Fragment>
       ))}
     </div>
+    </ChatContext.Provider>
   );
 }

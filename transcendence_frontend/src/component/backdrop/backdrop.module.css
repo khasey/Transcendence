@@ -47,9 +47,15 @@
     height: 100%;
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
+    flex-direction: column;
     background-color: rgb(223, 223, 223);
 }
-.enter_text{
-
+.textsendermodule{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    background-color: rgb(223, 223, 223);
 }
