@@ -8,8 +8,10 @@ export class ChatGateway {
   server: Server;
 
   @SubscribeMessage('chat message')
-  handleMessage(@MessageBody() message: string): void {
-    console.log("message recu serveur => " + message);
-    this.server.emit('chat message', message);
+  handleMessage(@MessageBody() message: { text: string, user: string }): void {
+  const { text, user } = message;
+  console.log("yo mess => " + text + " from =>" + user);
+  console.log("message recu serveur => " + text);
+  this.server.emit('chat message', text);
   }
 }
