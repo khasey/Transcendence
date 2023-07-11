@@ -1,4 +1,5 @@
 import { PassportStrategy } from '@nestjs/passport';
+import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { Strategy } from 'passport-42';
 
@@ -7,8 +8,8 @@ import { Strategy } from 'passport-42';
 export class FortyTwoStrategy extends PassportStrategy(Strategy, '42') {
   constructor() {
 	super({
-	  clientID: 'u-s4t2ud-4b59d2f3b0782fd287b010ca8d60afc6c2c83a39f298c46d0165eec2e5f86fa8',
-	  clientSecret: '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',
+	  clientID: 'u-s4t2ud-e7daa1cd3988c5b32348c2167317904d6f19afe7e320406b93f59ba17da0785a',
+	  clientSecret: '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',
 	  callbackURL: 'http://localhost:4000/login/callback',
 	  scope: 'public',
 	});
