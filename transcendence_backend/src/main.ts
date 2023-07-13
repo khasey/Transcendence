@@ -1,0 +1,37 @@
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
+import * as dotenv from 'dotenv';
+import { SocketIoAdapter } from './socket-io.adapter';
+
+
+async function bootstrap() {
+  dotenv.config(); // Ajoutez cette ligne ici
+
+  const app = await NestFactory.create(AppModule);
+
+  app.use(cookieParser());
+  
+
+  app.enableCors({
+    origin: 'http://localhost:3000', // ou toute autre origine que votre front-end utilise
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true, // cette ligne permet aux cookies d'être inclus
+  });
+  
+  app.useWebSocketAdapter(new SocketIoAdapter(app, true));
+  
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
+
+  await app.listen(4000);
+}
+
+bootstrap();
