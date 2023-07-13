@@ -7,7 +7,7 @@ import { AppController } from './app.controller';
 import { ChatGateway } from './chat/chat.gateway';
 
 @Module({
-  imports: [AuthModule, UserModule, 
+  imports: [AuthModule, UserModule, ChatModule, 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule.forRoot()],
       useFactory: () => ({
@@ -24,6 +24,6 @@ import { ChatGateway } from './chat/chat.gateway';
     // UserModule,
 ],
   controllers: [AppController],
-  providers: [ChatGateway],
+  providers: [],
 })
 export class AppModule {}
