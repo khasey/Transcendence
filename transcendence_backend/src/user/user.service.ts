@@ -56,5 +56,16 @@ export class UserService {
     await this.userRepository.save(user);
     return user;
   }
+  async updateUsername(userId: number, username: string): Promise<User> {
+    const user = await this.findUserById(userId);
+    console.log(' user service user ====>'+ user)
+    if (!user) {
+      console.log('User not found');
+    }
+    user.username = username;
+    console.log(' user service user.username ====>'+ user.username)
+    await this.userRepository.save(user);
+    return user;
+    }
 }
 
