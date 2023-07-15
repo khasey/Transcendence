@@ -1,10 +1,10 @@
-'use client'
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+'use client';
+import React, { useEffect, useState, useRef, useCallback, ChangeEvent } from 'react';
 import styles from './login.module.css';
-import { Avatar, Box, Button, Stack, TextField, styled } from '@mui/material';
+import { Avatar, Box, Button, Stack, TextField } from '@mui/material';
 import Link from 'next/link';
 import Particles from 'react-tsparticles';
-import type { Engine } from 'tsparticles-engine';
+import { Engine } from 'tsparticles-engine';
 import { loadFull } from 'tsparticles';
 import particlesOptions from '../particles.json';
 import { ISourceOptions } from 'tsparticles-engine';
@@ -12,6 +12,7 @@ import axios from 'axios';
 import { User } from '../../../../transcendence_backend/src/user/user.entity';
 
 const Profil: React.FC = () => {
+  const [username, setUsername] = useState('');
   const [user, setUser] = useState<User | null>(null);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -33,20 +34,20 @@ const Profil: React.FC = () => {
     await loadFull(engine);
   }, []);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
       setSelectedImage(file);
     }
   };
-  
+
   const updateProfilePicture = async () => {
     if (!selectedImage) return;
-  
+
     try {
       const formData = new FormData();
       formData.append('image', selectedImage);
-  
+
       const response = await axios.put<User>(
         `http://localhost:4000/user/${user?.id}/image`,
         formData,
@@ -57,20 +58,36 @@ const Profil: React.FC = () => {
           },
         }
       );
-  
+
       setUser(response.data);
-      console.log("resp data =>"+ response.data);
+      console.log('resp data =>' + response.data);
     } catch (error) {
       console.error('Erreur lors de la mise à jour de la photo de profil :', error);
     }
   };
-  console.log('imgaurl en front => '+user?.imageUrl)
+  console.log('imgaurl en front => ' + user?.imageUrl);
 
   const handleAvatarClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
+
+  const updateUsername = async () => {
+	try {
+	  const response = await axios.put(
+		`http://localhost:4000/user/${user?.id}/username`,
+		{ username },
+		{ withCredentials: true }
+	  );
+	  setUser((prevUser) => ({ ...prevUser, username: response.data.username }));
+	  // Vous pouvez ajouter une notification de succès ou effectuer d'autres actions nécessaires
+	} catch (error) {
+	  console.error('Erreur lors de la mise à jour du pseudo :', error);
+	  // Gérez l'erreur en conséquence (affichage d'une notification d'erreur, etc.)
+	}
+  };
+
 
   return (
     <div className={styles.profil}>
@@ -123,8 +140,10 @@ const Profil: React.FC = () => {
           <Box>
             <TextField
               label="username"
-              type="Text"
+              type="text"
               margin="none"
+              value={username}
+              onChange={(event: ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)}
               InputLabelProps={{
                 style: { color: 'white' },
               }}
@@ -160,7 +179,7 @@ const Profil: React.FC = () => {
             />
           </Box>
           <Link href="/intro" passHref>
-            <div className={styles.profile_in2_button}>START</div>
+            <div className={styles.profile_in2_button} onClick={updateUsername}>START</div>
           </Link>
         </Stack>
       </Stack>
