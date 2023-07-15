@@ -39,4 +39,17 @@ export class AppController {
   }
   return user;
 }
+  @Put('/user/:id/username')
+    async updateUsername(
+  @Param('id') userId: string,
+  @Body() body,
+): Promise<User> {
+  const { username } = body;
+  const parsedUserId = parseInt(userId, 10);
+  const user = await this.userService.updateUsername(parsedUserId, username);
+  if (!user) {
+    throw new NotFoundException('User not found');
+  }
+  return user;
+}
 }
