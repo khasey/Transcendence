@@ -1,0 +1,7 @@
+DATABASE_URL=postgresql://postgres:cm5wS8HF6R0SEeDLpI39@containers-us-west-34.railway.app:7184/railway
+POSTGRES_HOST=containers-us-west-34.railway.app
+POSTGRES_PORT=7184
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=cm5wS8HF6R0SEeDLpI39
+POSTGRES_DATABASE=railway
+JWT_SECRET=secret
