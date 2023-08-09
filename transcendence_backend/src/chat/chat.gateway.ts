@@ -141,7 +141,7 @@ async handleDirectMessage(@MessageBody() data: { text: string; user: User; chann
   newMessage.username = data.user.username;
   newMessage.imageUrl = data.user.imageUrl;
   
-  await this.messageRepository.save(newMessage);
+   // await this.messageRepository.save(newMessage);
   
   recipientSocket.emit('DM', newMessage);
   senderSocket.emit('DM', newMessage);
